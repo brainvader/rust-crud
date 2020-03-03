@@ -3,7 +3,7 @@ use listenfd::ListenFd;
 use std::io::Result;
 
 #[get("/hello")]
-async fn index() -> impl Responder {
+async fn hello_world() -> impl Responder {
     HttpResponse::Ok().body("Hello World!")
 }
 
@@ -11,7 +11,7 @@ async fn index() -> impl Responder {
 async fn main() -> Result<()> {
     let url = "127.0.0.1:8088";
     let mut listenfd = ListenFd::from_env();
-    let mut server = HttpServer::new(|| App::new().service(index));
+    let mut server = HttpServer::new(|| App::new().service(hello_world));
 
     server = if let Some(l) = listenfd.take_tcp_listener(0).unwrap() {
         server.listen(l)?
