@@ -4,6 +4,7 @@ async fn index() -> impl Responder {
     "Hello World!"
 }
 
-fn main() {
+#[actix_rt::main]
+async fn main() {
     println!("Hello, world!");
 }
