@@ -2,7 +2,7 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use std::io::Result;
 
 async fn index() -> impl Responder {
-    "Hello World!"
+    HttpResponse::Ok().body("Hello World!")
 }
 
 #[actix_rt::main]
