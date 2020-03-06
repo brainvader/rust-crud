@@ -3,6 +3,8 @@ use listenfd::ListenFd;
 use std::io::Result;
 
 mod example;
+// implicit root module
+use crate::example::hello;
 
 #[actix_rt::main]
 async fn main() -> Result<()> {
