@@ -2,9 +2,17 @@ use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use listenfd::ListenFd;
 use std::io::Result;
 
-#[get("/hello")]
-async fn hello_world() -> impl Responder {
-    HttpResponse::Ok().body("Hello World!")
+mod hello {
+    use actix_web::{get, web, HttpResponse, Responder};
+
+    #[get("/hello")]
+    async fn hello_world() -> impl Responder {
+        HttpResponse::Ok().body("Hello World!")
+    }
+
+    pub fn config(cfg: &mut web::ServiceConfig) {
+        cfg.service(hello_world);
+    }
 }
 
 #[actix_rt::main]
@@ -13,7 +21,7 @@ async fn main() -> Result<()> {
     let mut listenfd = ListenFd::from_env();
     let mut server = HttpServer::new(|| {
         App::new()
-            .service(hello_world)
+            .configure(hello::config)
             .default_service(web::to(|| HttpResponse::NotFound()))
     });
 
