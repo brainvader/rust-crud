@@ -1,6 +1,8 @@
 # rust-crud
 
-This is an experimental project for CRUD application with Elm, Rust, and Elasticsearch. This project consists of simple three layers.
+## Overview
+
+This is an experimental project for CRUD application with Elm and Rust. This project consists of simple three layers.
 
 The following table shows that the relation between abstract layers and thier concrete components:
 
@@ -8,7 +10,7 @@ The following table shows that the relation between abstract layers and thier co
 ----|----|
 | UI/Frontend | [Elm](https://elm-lang.org/) |
 | API/Backend | [Actix](https://actix.rs/) |
-| DB | [Elasticsearch](https://www.elastic.co/) |
+| DB | [bayard](https://github.com/bayard-search/bayard) |
 
 ## Other Components
 
@@ -24,7 +26,9 @@ For serving the elm application, [Nginx](https://www.nginx.com/) is used as HTTP
 
 ## Commands
 
-### Run in Development Mode
+### Run The Server in Watch Mode
+
+To run a actix-web server in watch mode, need some trick below.
 
 ```bash
 systemfd --no-pid -s http::3000 -- cargo watch -x run
