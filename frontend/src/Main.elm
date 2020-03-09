@@ -63,13 +63,15 @@ update msg preModel =
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = "This is a Top Page"
-    , body =
-        [ div
-            []
-            [ text "rust crud" ]
-        ]
-    }
+    case model.currentPage of
+        NotFound ->
+            viewNotFound model
+
+        Top ->
+            viewTop model
+
+        Second ->
+            viewSecond model
 
 
 viewTop : Model -> Browser.Document Msg
