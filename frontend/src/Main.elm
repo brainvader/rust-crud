@@ -117,12 +117,12 @@ toUpdate model newPage =
 toPage : Url.Url -> Page
 toPage url =
     url
-        |> Router.parse urlParser
+        |> Router.parse routes
         |> Maybe.withDefault NotFound
 
 
-urlParser : Parser (Page -> a) a
-urlParser =
+routes : Parser (Page -> a) a
+routes =
     Router.oneOf
         [ route top Top
         , route (s "second") Second
