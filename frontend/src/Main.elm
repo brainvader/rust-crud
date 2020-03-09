@@ -34,10 +34,7 @@ type Page
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     url
-        |> stepUrl
-            { key = key
-            , currentPage = Top
-            }
+        |> stepUrl (Model key Top)
 
 
 type Msg
