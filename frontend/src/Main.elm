@@ -3,6 +3,7 @@ module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (Html, div, text)
+import Url exposing (Url)
 
 
 main : Program () Model Msg
@@ -27,6 +28,13 @@ type Page
     = NotFound
     | Top
     | Second
+
+
+init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
+init _ url key =
+    { key = key
+    , currentPage = Top
+    }
 
 
 view : Html msg
