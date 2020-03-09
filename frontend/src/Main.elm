@@ -118,7 +118,7 @@ urlParser : Parser (Page -> a) a
 urlParser =
     Router.oneOf
         [ route top Top
-        , route (s "about") Second
+        , route (s "second") Second
         ]
 
 
