@@ -4,6 +4,7 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (Html, div, text)
 import Url exposing (Url)
+import Url.Parser as Router exposing (Parser, s, top)
 
 
 main : Program () Model Msg
@@ -20,7 +21,7 @@ main =
 
 type alias Model =
     { key : Nav.Key
-    , curentPage : Page
+    , currentPage : Page
     }
 
 
@@ -66,3 +67,38 @@ view model =
             [ text "rust crud" ]
         ]
     }
+
+
+stepUrl : Model -> Url.Url -> ( Model, Cmd Msg )
+stepUrl model url =
+    ( { model | currentPage = url |> toPage }
+    , case model.currentPage of
+        NotFound ->
+            Cmd.none
+
+        Top ->
+            Cmd.none
+
+        Second ->
+            Cmd.none
+    )
+
+
+toPage : Url.Url -> Page
+toPage url =
+    url
+        |> Router.parse urlParser
+        |> Maybe.withDefault NotFound
+
+
+urlParser : Parser (Page -> a) a
+urlParser =
+    Router.oneOf
+        [ route top Top
+        , route (s "about") Second
+        ]
+
+
+route : Parser a b -> a -> Parser (b -> c) c
+route parser handler =
+    Router.map handler parser
