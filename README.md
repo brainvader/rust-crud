@@ -59,6 +59,7 @@ elm-live src/Main.elm --open --pushstate --port=5050 --host=localhost --dir=./di
 * [package.elm-lang.org](https://github.com/elm/package.elm-lang.org)
 * [Routing in Elm](https://elm.christmas/2018/15)
 * [Learning Elm, part 2](http://lucasmreis.github.io/blog/learning-elm-part-2/)
+* [elm-ui: Forget CSS and enjoy creating UIs in pure Elm](https://korban.net/posts/elm/2019-11-17-elm-ui-introduction/)
 
 ### bayard
 
