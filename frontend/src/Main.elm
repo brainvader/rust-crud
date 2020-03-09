@@ -1,12 +1,20 @@
 module Main exposing (main)
 
+import Browser
 import Browser.Navigation as Nav
 import Html exposing (Html, div, text)
 
 
-main : Html msg
+main : Program () Model Msg
 main =
-    view
+    Browser.application
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = \_ -> Sub.none
+        , onUrlChange = UrlChanged
+        , onUrlRequest = LinkClicked
+        }
 
 
 type alias Model =
@@ -18,7 +26,7 @@ type alias Model =
 type Page
     = NotFound
     | Top
-    | About
+    | Second
 
 
 view : Html msg
