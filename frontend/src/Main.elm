@@ -42,6 +42,21 @@ type Msg
     | UrlChanged Url.Url
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg preModel =
+    case msg of
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( preModel, Nav.pushUrl preModel.key (Url.toString url) )
+
+                Browser.External href ->
+                    ( preModel, Nav.load href )
+
+        UrlChanged url ->
+            ( preModel, Cmd.none )
+
+
 view : Html msg
 view =
     div [] [ text "rust crud" ]
