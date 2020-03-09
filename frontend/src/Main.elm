@@ -2,7 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, div, h1, text)
+import Html exposing (Html, a, div, h1, li, text, ul)
+import Html.Attributes exposing (href)
 import Url exposing (Url)
 import Url.Parser as Router exposing (Parser, s, top)
 
@@ -74,7 +75,10 @@ view model =
 viewTop : Model -> Browser.Document Msg
 viewTop model =
     { title = "This is a Top page"
-    , body = [ h1 [] [ text "Welcome" ] ]
+    , body =
+        [ h1 [] [ text "Welcome" ]
+        , viewIndex
+        ]
     }
 
 
@@ -90,6 +94,21 @@ viewNotFound model =
     { title = "Not Found"
     , body = [ h1 [] [ text "404 Page Not Found" ] ]
     }
+
+
+viewIndex : Html msg
+viewIndex =
+    ul []
+        [ viewLink "/"
+        , viewLink "/second"
+        ]
+
+
+viewLink : String -> Html msg
+viewLink path =
+    li []
+        [ a [ href path ] [ text path ]
+        ]
 
 
 stepUrl : Model -> Url.Url -> ( Model, Cmd Msg )
