@@ -94,8 +94,13 @@ viewNotFound model =
 
 stepUrl : Model -> Url.Url -> ( Model, Cmd Msg )
 stepUrl model url =
-    ( { model | currentPage = url |> toPage }
-    , case model.currentPage of
+    let
+        newPage =
+            url
+                |> toPage
+    in
+    ( { model | currentPage = newPage }
+    , case newPage of
         NotFound ->
             Cmd.none
 
