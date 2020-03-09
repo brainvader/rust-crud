@@ -57,6 +57,12 @@ update msg preModel =
             ( preModel, Cmd.none )
 
 
-view : Html msg
-view =
-    div [] [ text "rust crud" ]
+view : Model -> Browser.Document Msg
+view model =
+    { title = "This is a Top Page"
+    , body =
+        [ div
+            []
+            [ text "rust crud" ]
+        ]
+    }
