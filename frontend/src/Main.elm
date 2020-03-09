@@ -120,6 +120,7 @@ stepUrl model url =
 
 toUpdate : Model -> Page -> ( Model, Cmd Msg )
 toUpdate model newPage =
+    -- TODO: get session data to share data between pages
     ( { model | currentPage = newPage }
     , case newPage of
         NotFound ->
