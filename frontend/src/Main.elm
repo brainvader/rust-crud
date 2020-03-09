@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, div, text)
+import Html exposing (Html, div, h1, text)
 import Url exposing (Url)
 import Url.Parser as Router exposing (Parser, s, top)
 
@@ -69,6 +69,27 @@ view model =
             []
             [ text "rust crud" ]
         ]
+    }
+
+
+viewTop : Model -> Browser.Document Msg
+viewTop model =
+    { title = "This is a Top page"
+    , body = [ h1 [] [ text "Welcome" ] ]
+    }
+
+
+viewSecond : Model -> Browser.Document Msg
+viewSecond model =
+    { title = "This is a Second page"
+    , body = [ h1 [] [ text "Second Page" ] ]
+    }
+
+
+viewNotFound : Model -> Browser.Document Msg
+viewNotFound model =
+    { title = "Not Found"
+    , body = [ h1 [] [ text "404 Page Not Found" ] ]
     }
 
 
