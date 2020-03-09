@@ -32,9 +32,9 @@ type Page
 
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
-    { key = key
-    , currentPage = Top
-    }
+    ( Model key Top
+    , Cmd.none
+    )
 
 
 type Msg
