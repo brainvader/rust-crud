@@ -50,25 +50,25 @@ elm-live src/Main.elm --open --pushstate --port=5050 --host=localhost --dir=./di
 
 ### actix-web
 
-[actix](https://actix.rs/)
-[actix/examples](https://github.com/actix/examples)
-[rustbook-1/ch11](https://github.com/KeenS/rustbook-1/tree/actix-web-2.0.0/ch11)
+* [actix](https://actix.rs/)
+* [actix/examples](https://github.com/actix/examples)
+* [rustbook-1/ch11](https://github.com/KeenS/rustbook-1/tree/actix-web-2.0.0/ch11)
 
 ### Elm
 
-[package.elm-lang.org](https://github.com/elm/package.elm-lang.org)
-[Routing in Elm](https://elm.christmas/2018/15)
-[Learning Elm, part 2](http://lucasmreis.github.io/blog/learning-elm-part-2/)
+* [package.elm-lang.org](https://github.com/elm/package.elm-lang.org)
+* [Routing in Elm](https://elm.christmas/2018/15)
+* [Learning Elm, part 2](http://lucasmreis.github.io/blog/learning-elm-part-2/)
 
 ### bayard
 
-[bayard-search/bayard](https://github.com/bayard-search/bayard)
-[Bayard documentation](https://bayard-search.github.io/bayard/overview.html)
-[Rust製全文検索エンジンのbayardを入れてみた](https://qiita.com/gosarami/items/d198c15e960f856f63b1)
+* [bayard-search/bayard](https://github.com/bayard-search/bayard)
+* [Bayard documentation](https://bayard-search.github.io/bayard/overview.html)
+* [Rust製全文検索エンジンのbayardを入れてみた](https://qiita.com/gosarami/items/d198c15e960f856f63b1)
 
 ### Nginx
 
-[Beginner’s Guide](http://nginx.org/en/docs/beginners_guide.html)
-[Nginx Documentation - Web Server](https://docs.nginx.com/nginx/admin-guide/web-server/)
-[Nginx Tutorial](https://www.netguru.com/codestories/nginx-tutorial-basics-concepts)
-[Nginx Tutorial Step by Step with Examples](https://knockdata.github.io/Nginx-Tutorial-Step-by-Step-with-Examples/   )
+* [Beginner’s Guide](http://nginx.org/en/docs/beginners_guide.html)
+* [Nginx Documentation - Web Server](https://docs.nginx.com/nginx/admin-guide/web-server/)
+* [Nginx Tutorial](https://www.netguru.com/codestories/nginx-tutorial-basics-concepts)
+* [Nginx Tutorial Step by Step with Examples](https://knockdata.github.io/Nginx-Tutorial-Step-by-Step-with-Examples/   )
