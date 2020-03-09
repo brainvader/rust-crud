@@ -37,6 +37,11 @@ init _ url key =
     }
 
 
+type Msg
+    = LinkClicked Browser.UrlRequest
+    | UrlChanged Url.Url
+
+
 view : Html msg
 view =
     div [] [ text "rust crud" ]
