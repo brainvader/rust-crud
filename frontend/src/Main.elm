@@ -57,7 +57,8 @@ update msg preModel =
                     ( preModel, Nav.load href )
 
         UrlChanged url ->
-            ( preModel, Cmd.none )
+            url
+                |> stepUrl preModel
 
 
 view : Model -> Browser.Document Msg
