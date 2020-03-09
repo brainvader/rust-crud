@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, a, div, h1, li, text, ul)
+import Html exposing (Html, a, h1, li, text, ul)
 import Html.Attributes exposing (href)
 import Url exposing (Url)
 import Url.Parser as Router exposing (Parser, s, top)
