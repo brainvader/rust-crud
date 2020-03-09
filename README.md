@@ -37,3 +37,11 @@ systemfd --no-pid -s http::3000 -- cargo watch -x run
 If You would like to know waht is each part of the command, please consult following link.
 
 [Auto-Reloading Development Server](https://actix.rs/docs/autoreload/)
+
+### Build Elm with elm-live
+
+To build the elm application, using [elm-live](https://www.elm-live.com/).
+
+```bash
+elm-live src/Main.elm --open --pushstate --port=5050 --host=localhost --dir=./dist -- --output=./dist/index.html
+```
