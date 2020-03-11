@@ -34,8 +34,12 @@ type alias Answer =
     List Cell
 
 
+type QuizId
+    = QuizId Int
+
+
 type alias Quiz =
-    { id : Int
+    { id : QuizId
     , question : Question
     , answer : Answer
     }
