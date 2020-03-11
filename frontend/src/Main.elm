@@ -34,6 +34,13 @@ type alias Answer =
     List Cell
 
 
+type alias Quiz =
+    { id : Int
+    , question : Question
+    , answer : Answer
+    }
+
+
 type alias Model =
     { key : Nav.Key
     , currentPage : Page
