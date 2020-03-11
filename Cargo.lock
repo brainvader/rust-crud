@@ -1143,6 +1143,7 @@ dependencies = [
  "actix-rt",
  "actix-web",
  "listenfd",
+ "serde",
 ]
 
 [[package]]
