@@ -20,6 +20,12 @@ main =
         }
 
 
+type alias Cell =
+    { kind : String
+    , content : String
+    }
+
+
 type alias Model =
     { key : Nav.Key
     , currentPage : Page
