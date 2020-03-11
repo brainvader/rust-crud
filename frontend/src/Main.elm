@@ -30,6 +30,10 @@ type alias Question =
     List Cell
 
 
+type alias Answer =
+    List Cell
+
+
 type alias Model =
     { key : Nav.Key
     , currentPage : Page
