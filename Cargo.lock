@@ -1145,6 +1145,7 @@ dependencies = [
  "futures",
  "listenfd",
  "serde",
+ "serde_json",
 ]
 
 [[package]]
