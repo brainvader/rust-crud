@@ -4,7 +4,9 @@ use serde::Serialize;
 
 #[get("/hello")]
 async fn hello_world() -> impl Responder {
-    HttpResponse::Ok().body("Hello World!")
+    let mut response_builder = HttpResponse::Ok();
+    let body = "Hello World!";
+    response_builder.body(body)
 }
 
 #[derive(Serialize)]
