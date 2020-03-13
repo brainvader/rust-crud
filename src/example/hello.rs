@@ -21,7 +21,8 @@ impl Responder for MyObj {
     fn respond_to(self, _req: &HttpRequest) -> Self::Future {
         let mime_type = "application/json";
         let body = serde_json::to_string(&self).unwrap();
-        let response = HttpResponse::Ok().content_type(mime_type).body(body);
+        let mut response_builder = HttpResponse::Ok();
+        let response = response_builder.content_type(mime_type).body(body);
         ready(Ok(response))
     }
 }
