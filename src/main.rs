@@ -12,7 +12,7 @@ async fn main() -> Result<()> {
     let mut listenfd = ListenFd::from_env();
     let mut server = HttpServer::new(|| {
         App::new()
-            .configure(hello::config)
+            .service(web::scope("/example").configure(hello::config))
             .default_service(web::to(|| HttpResponse::NotFound()))
     });
 
