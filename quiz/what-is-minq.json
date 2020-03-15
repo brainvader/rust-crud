@@ -1,0 +1,14 @@
+{
+    "question": [
+        {
+            "kind": "text",
+            "content": "MinQとは?"
+        }
+    ],
+    "answer": [
+        {
+            "kind": "text",
+            "content": "MinQはクイズベースの学習プラットフォームです."
+        }
+    ]
+}
