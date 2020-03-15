@@ -19,6 +19,7 @@ async fn main() -> Result<()> {
     let mut server = HttpServer::new(|| {
         App::new()
             .service(web::scope("/example").configure(hello::config))
+            .service(fs::Files::new("/static", ".").show_files_listing())
             .default_service(web::to(page_404))
     });
 
