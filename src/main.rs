@@ -6,6 +6,7 @@ use std::io::Result;
 
 mod example;
 // implicit root module
+use crate::example::db;
 use crate::example::hello;
 
 async fn page_404() -> Result<fs::NamedFile> {
@@ -18,7 +19,11 @@ async fn main() -> Result<()> {
     let mut listenfd = ListenFd::from_env();
     let mut server = HttpServer::new(|| {
         App::new()
-            .service(web::scope("/example").configure(hello::config))
+            .service(
+                web::scope("/example")
+                    .configure(hello::config)
+                    .configure(db::config),
+            )
             .service(fs::Files::new("/static", ".").show_files_listing())
             .default_service(web::to(page_404))
     });
