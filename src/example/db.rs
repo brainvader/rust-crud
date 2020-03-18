@@ -13,6 +13,7 @@ struct Post {
     author: String,
 }
 
+#[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 struct Comment {
     id: u8,
