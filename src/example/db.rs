@@ -1,5 +1,5 @@
 use actix_web::{get, web, HttpResponse, Result};
-use serde::{Deserialize, Serialize};
+use serde::{de, Deserialize, Serialize};
 use std::fs::File;
 use std::io::BufReader;
 use std::path::Path;
@@ -33,13 +33,21 @@ struct DB {
     profile: Profile,
 }
 
+fn read_from_json<T>(file_str: &str) -> Result<T>
+where
+    T: de::DeserializeOwned,
+{
+    let path_to_file = Path::new(file_str);
+    let file = File::open(path_to_file)?;
+    let reader = BufReader::new(file);
+    let data: T = serde_json::from_reader(reader)?;
+    Ok(data)
+}
+
 #[get("posts")]
 async fn get_posts() -> Result<HttpResponse> {
     let mut response_builder = HttpResponse::Ok();
-    let path_to_file = Path::new("./quiz/db.json");
-    let file = File::open(path_to_file)?;
-    let reader = BufReader::new(file);
-    let data: DB = serde_json::from_reader(reader)?;
+    let data = read_from_json::<DB>("./quiz/db.json")?;
     let posts: Vec<Post> = data.posts;
     let mime_type = "application/json";
     let response = response_builder.content_type(mime_type).json(posts);
