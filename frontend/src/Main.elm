@@ -5,6 +5,7 @@ import Browser.Navigation as Nav
 import Html exposing (Html, a, button, h1, li, text, ul)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
+import Http
 import Url exposing (Url)
 import Url.Parser as Router exposing (Parser, s, top)
 
@@ -69,6 +70,7 @@ type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
     | SendHttpRequest
+    | DataReceived (Result Http.Error Quiz)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
