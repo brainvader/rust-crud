@@ -120,7 +120,7 @@ update msg preModel =
                     ( { preModel | pageData = Just quiz }, Cmd.none )
 
                 Err httpError ->
-                    ( preModel, Cmd.none )
+                    ( { preModel | errorMessage = Just (buildErrorMessage httpError) }, Cmd.none )
 
 
 buildErrorMessage : Http.Error -> String
