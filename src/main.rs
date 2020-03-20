@@ -1,6 +1,6 @@
 use actix_files as fs;
 use actix_web::http::StatusCode;
-use actix_web::{web, App, HttpResponse, HttpServer};
+use actix_web::{middleware, web, App, HttpResponse, HttpServer};
 use listenfd::ListenFd;
 use std::io::Result;
 
@@ -19,6 +19,7 @@ async fn main() -> Result<()> {
     let mut listenfd = ListenFd::from_env();
     let mut server = HttpServer::new(|| {
         App::new()
+            .wrap(middleware::DefaultHeaders::new().header("Access-Control-Allow-Origin", "*"))
             .service(
                 web::scope("/example")
                     .configure(hello::config)
