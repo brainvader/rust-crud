@@ -2,8 +2,9 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, a, h1, li, text, ul)
+import Html exposing (Html, a, button, h1, li, text, ul)
 import Html.Attributes exposing (href)
+import Html.Events exposing (onClick)
 import Url exposing (Url)
 import Url.Parser as Router exposing (Parser, s, top)
 
@@ -121,7 +122,7 @@ viewSecond model =
 viewMinq : Model -> Browser.Document Msg
 viewMinq model =
     { title = "MinQ Test Page"
-    , body = [ h1 [] [ text "Welcom Minq" ] ]
+    , body = [ h1 [] [ text "Welcom Minq" ], button [ onClick ] [ text "Get Quiz!!" ] ]
     }
 
 
