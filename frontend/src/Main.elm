@@ -186,6 +186,9 @@ viewMinq model =
         , case model.errorMessage of
             Just message ->
                 viewError message
+
+            Nothing ->
+                viewQuiz model.pageData
         ]
     }
 
@@ -200,6 +203,34 @@ viewError errorMessage =
         [ h3 [] [ text errorHeading ]
         , text ("Error: " ++ errorMessage)
         ]
+
+
+viewQuiz : Maybe Quiz -> Html Msg
+viewQuiz data =
+    case data of
+        Just quiz ->
+            div []
+                [ div []
+                    [ quiz.id |> String.fromInt >> text ]
+                , renderCells quiz.question
+                , renderCells quiz.answer
+                ]
+
+        Nothing ->
+            div [] [ text "No Quiz" ]
+
+
+renderCells : List Cell -> Html msg
+renderCells cells =
+    ul []
+        (cells
+            |> List.map toLi
+        )
+
+
+toLi : Cell -> Html msg
+toLi cell =
+    li [] [ text cell.content ]
 
 
 viewNotFound : Model -> Browser.Document Msg
