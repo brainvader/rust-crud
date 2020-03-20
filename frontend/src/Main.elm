@@ -48,6 +48,7 @@ type alias Quiz =
 type alias Model =
     { key : Nav.Key
     , currentPage : Page
+    , pageData : Maybe Quiz
     }
 
 
@@ -61,7 +62,7 @@ type Page
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     url
-        |> stepUrl (Model key Top)
+        |> stepUrl (Model key Top Nothing)
 
 
 type Msg
@@ -111,6 +112,11 @@ update msg preModel =
 
         SendHttpRequest ->
             ( preModel, Cmd.none )
+
+        DataReceived result ->
+            case result of
+                Ok quiz ->
+                    ( { preModel | pageData = Just quiz }, Cmd.none )
 
 
 view : Model -> Browser.Document Msg
