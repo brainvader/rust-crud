@@ -82,6 +82,14 @@ cellDecoder =
         |> required "content" string
 
 
+quizDecoder : Decoder Quiz
+quizDecoder =
+    Decode.succeed Quiz
+        |> required "id" int
+        |> required "question" (list cellDecoder)
+        |> required "answer" (list cellDecoder)
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg preModel =
     case msg of
