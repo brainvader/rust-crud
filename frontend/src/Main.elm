@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, a, button, h1, li, text, ul)
+import Html exposing (Html, a, button, div, h1, h3, li, text, ul)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 import Http
@@ -178,8 +178,28 @@ viewSecond model =
 viewMinq : Model -> Browser.Document Msg
 viewMinq model =
     { title = "MinQ Test Page"
-    , body = [ h1 [] [ text "Welcom Minq" ], button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ] ]
+    , body =
+        [ h1 []
+            [ text "Welcom Minq" ]
+        , button [ onClick SendHttpRequest ]
+            [ text "Get Quiz!!" ]
+        , case model.errorMessage of
+            Just message ->
+                viewError message
+        ]
     }
+
+
+viewError : String -> Html Msg
+viewError errorMessage =
+    let
+        errorHeading =
+            "Couldn't fetch data at this time."
+    in
+    div []
+        [ h3 [] [ text errorHeading ]
+        , text ("Error: " ++ errorMessage)
+        ]
 
 
 viewNotFound : Model -> Browser.Document Msg
