@@ -51,7 +51,12 @@ elm-live src/Main.elm --open --pushstate --port=5050 --host=localhost --dir=./di
 ### actix-web
 
 * [actix](https://actix.rs/)
+* [actix_rt](https://docs.rs/actix-rt/1.0.0/actix_rt/index.html)
+* [actix_cors](https://docs.rs/actix-cors/0.3.0-alpha.1/actix_cors/)
 * [actix/examples](https://github.com/actix/examples)
+* [Active-web Archives - TURRETA](https://turreta.com/tag/active-web/)
+* [Overview · Serde](https://serde.rs/)
+* [Error Handling - A Gentle Introduction to Rust](https://stevedonovan.github.io/rust-gentle-intro/6-error-handling.html)
 * [rustbook-1/ch11](https://github.com/KeenS/rustbook-1/tree/actix-web-2.0.0/ch11)
 
 ### Elm
@@ -60,6 +65,8 @@ elm-live src/Main.elm --open --pushstate --port=5050 --host=localhost --dir=./di
 * [Routing in Elm](https://elm.christmas/2018/15)
 * [Learning Elm, part 2](http://lucasmreis.github.io/blog/learning-elm-part-2/)
 * [elm-ui: Forget CSS and enjoy creating UIs in pure Elm](https://korban.net/posts/elm/2019-11-17-elm-ui-introduction/)
+* [elm-json-decode-pipeline](https://package.elm-lang.org/packages/NoRedInk/elm-json-decode-pipeline/latest/)
+* [remotedata](https://package.elm-lang.org/packages/krisajenkins/remotedata/latest/)
 
 ### bayard
 
