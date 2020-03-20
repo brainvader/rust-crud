@@ -75,6 +75,14 @@ type Msg
     | DataReceived (Result Http.Error Quiz)
 
 
+getQuiz : Cmd Msg
+getQuiz =
+    Http.get
+        { url = "http://127.0.0.1:3000/example/what-is-minq"
+        , expect = Http.expectJson DataReceived quizDecoder
+        }
+
+
 cellDecoder : Decoder Cell
 cellDecoder =
     Decode.succeed Cell
