@@ -68,6 +68,7 @@ init _ url key =
 type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
+    | SendHttpRequest
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -84,6 +85,9 @@ update msg preModel =
         UrlChanged url ->
             url
                 |> stepUrl preModel
+
+        SendHttpRequest ->
+            ( preModel, Cmd.none )
 
 
 view : Model -> Browser.Document Msg
@@ -122,7 +126,7 @@ viewSecond model =
 viewMinq : Model -> Browser.Document Msg
 viewMinq model =
     { title = "MinQ Test Page"
-    , body = [ h1 [] [ text "Welcom Minq" ], button [ onClick ] [ text "Get Quiz!!" ] ]
+    , body = [ h1 [] [ text "Welcom Minq" ], button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ] ]
     }
 
 
