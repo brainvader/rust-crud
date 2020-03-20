@@ -55,6 +55,7 @@ type Page
     = NotFound
     | Top
     | Second
+    | Minq
 
 
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
@@ -96,6 +97,9 @@ view model =
         Second ->
             viewSecond model
 
+        Minq ->
+            viewMinq model
+
 
 viewTop : Model -> Browser.Document Msg
 viewTop model =
@@ -114,6 +118,13 @@ viewSecond model =
     }
 
 
+viewMinq : Model -> Browser.Document Msg
+viewMinq model =
+    { title = "MinQ Test Page"
+    , body = [ h1 [] [ text "Welcom Minq" ] ]
+    }
+
+
 viewNotFound : Model -> Browser.Document Msg
 viewNotFound model =
     { title = "Not Found"
@@ -126,6 +137,7 @@ viewIndex =
     ul []
         [ viewLink "/"
         , viewLink "/second"
+        , viewLink "/minq"
         ]
 
 
@@ -156,6 +168,9 @@ toUpdate model newPage =
 
         Second ->
             Cmd.none
+
+        Minq ->
+            Cmd.none
     )
 
 
@@ -171,6 +186,7 @@ routes =
     Router.oneOf
         [ route top Top
         , route (s "second") Second
+        , route (s "minq") Minq
         ]
 
 
