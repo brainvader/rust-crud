@@ -6,6 +6,8 @@ import Html exposing (Html, a, button, h1, li, text, ul)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 import Http
+import Json.Decode as Decode exposing (Decoder, int, list, string)
+import Json.Decode.Pipeline exposing (required)
 import Url exposing (Url)
 import Url.Parser as Router exposing (Parser, s, top)
 
@@ -71,6 +73,13 @@ type Msg
     | UrlChanged Url.Url
     | SendHttpRequest
     | DataReceived (Result Http.Error Quiz)
+
+
+cellDecoder : Decoder Cell
+cellDecoder =
+    Decode.succeed Cell
+        |> required "kind" string
+        |> required "content" string
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
