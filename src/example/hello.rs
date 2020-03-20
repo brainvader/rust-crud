@@ -12,6 +12,8 @@ async fn hello_world() -> impl Responder {
     response_builder.body(body)
 }
 
+type QuizId = u8;
+
 #[derive(Serialize, Deserialize)]
 struct Cell {
     kind: String,
@@ -20,6 +22,7 @@ struct Cell {
 
 #[derive(Serialize, Deserialize)]
 struct Quiz {
+    id: QuizId,
     question: Vec<Cell>,
     answer: Vec<Cell>,
 }
