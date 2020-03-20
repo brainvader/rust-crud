@@ -112,7 +112,7 @@ update msg preModel =
                 |> stepUrl preModel
 
         SendHttpRequest ->
-            ( preModel, Cmd.none )
+            ( preModel, getQuiz )
 
         DataReceived result ->
             case result of
