@@ -46,6 +46,22 @@ To build the elm application, using [elm-live](https://www.elm-live.com/).
 elm-live src/Main.elm --open --pushstate --port=5050 --host=localhost --dir=./dist -- --output=./dist/index.html
 ```
 
+### Run bayard on Docker
+
+Just follow [Running on Docker](https://bayard-search.github.io/bayard/running_on_docker.html) chapter on bayard documentation. You have to get the latest bayard image from [the official registory](https://hub.docker.com/r/bayardsearch/bayard/tags/) on DockerHub
+
+```
+docker pull bayardsearch/bayard:latest
+```
+
+After having gotten the image, you can run a containerized bayard app like below.
+
+```
+docker run --rm --name bayard \
+    -p 5000:5000 \
+    bayardsearch/bayard:latest serve
+```
+
 ## Reference
 
 ### actix-web
