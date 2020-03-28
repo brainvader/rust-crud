@@ -1,3 +1,4 @@
+use actix_files as fs;
 use actix_web::{get, web, Error, HttpRequest, HttpResponse, Responder, Result};
 use futures::future::{ready, Ready};
 use serde::{Deserialize, Serialize};
@@ -10,6 +11,11 @@ async fn hello_world() -> impl Responder {
     let mut response_builder = HttpResponse::Ok();
     let body = "Hello World!";
     response_builder.body(body)
+}
+
+#[get("/svg/test")]
+async fn test_svg() -> Result<fs::NamedFile> {
+    Ok(fs::NamedFile::open("./static/image/test.svg")?)
 }
 
 type QuizId = u8;
@@ -65,5 +71,6 @@ async fn my_obj() -> impl Responder {
 pub fn config(cfg: &mut web::ServiceConfig) {
     cfg.service(my_obj)
         .service(hello_world)
-        .service(what_is_minq);
+        .service(what_is_minq)
+        .service(test_svg);
 }
