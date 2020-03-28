@@ -181,14 +181,14 @@ viewMinq model =
     , body =
         [ h1 []
             [ text "Welcom Minq" ]
-        , button [ onClick SendHttpRequest ]
-            [ text "Get Quiz!!" ]
         , case model.errorMessage of
             Just message ->
                 viewError message
 
             Nothing ->
                 viewQuiz model.pageData
+        , button [ onClick SendHttpRequest ]
+            [ text "Get Quiz!!" ]
         ]
     }
 
