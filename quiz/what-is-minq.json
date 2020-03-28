@@ -10,6 +10,10 @@
         {
             "kind": "text",
             "content": "MinQはクイズベースの学習プラットフォームです."
+        },
+        {
+            "kind": "svg",
+            "content": "http://127.0.0.1:3000/example/svg/test"
         }
     ]
 }
