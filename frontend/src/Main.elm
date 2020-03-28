@@ -2,8 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, a, button, div, h1, h3, li, text, ul)
-import Html.Attributes exposing (href)
+import Html exposing (Html, a, button, div, h1, h3, img, li, text, ul)
+import Html.Attributes exposing (height, href, src, width)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder, int, list, string)
@@ -214,6 +214,7 @@ viewQuiz data =
                     [ quiz.id |> String.fromInt >> text ]
                 , renderCells quiz.question
                 , renderCells quiz.answer
+                , viewSVG "http://127.0.0.1:3000/example/svg/test"
                 ]
 
         Nothing ->
@@ -238,6 +239,16 @@ viewNotFound model =
     { title = "Not Found"
     , body = [ h1 [] [ text "404 Page Not Found" ] ]
     }
+
+
+viewSVG : String -> Html msg
+viewSVG url =
+    img
+        [ src url
+        , width 500
+        , height 500
+        ]
+        []
 
 
 viewIndex : Html msg
