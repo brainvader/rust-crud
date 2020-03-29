@@ -49,6 +49,7 @@ type alias Model =
     { key : Nav.Key
     , currentPage : Page
     , pageData : Maybe Quiz
+    , counter : Int
     , errorMessage : Maybe String
     }
 
@@ -63,7 +64,7 @@ type Page
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     url
-        |> stepUrl (Model key Top Nothing Nothing)
+        |> stepUrl (Model key Top Nothing 0 Nothing)
 
 
 type Msg
@@ -71,6 +72,8 @@ type Msg
     | UrlChanged Url.Url
     | SendHttpRequest
     | DataReceived (Result Http.Error Quiz)
+    | Increment
+    | Decrement
 
 
 getQuiz : Cmd Msg
@@ -121,6 +124,41 @@ update msg preModel =
 
                 Err httpError ->
                     ( { preModel | errorMessage = Just (buildErrorMessage httpError) }, Cmd.none )
+
+        Increment ->
+            let
+                max =
+                    case preModel.pageData of
+                        Just quiz ->
+                            quiz.answer
+                                |> List.length
+
+                        Nothing ->
+                            0
+            in
+            ( { preModel | counter = preModel.counter |> countUp max }, Cmd.none )
+
+        Decrement ->
+            ( { preModel | counter = preModel.counter |> countDown }, Cmd.none )
+
+
+countUp : Int -> Int -> Int
+countUp max count =
+    if count == max then
+        count
+
+    else
+        count + 1
+
+
+countDown : Int -> Int
+countDown count =
+    case count of
+        0 ->
+            0
+
+        _ ->
+            count - 1
 
 
 buildErrorMessage : Http.Error -> String
@@ -186,9 +224,7 @@ viewMinq model =
                 viewError message
 
             Nothing ->
-                viewQuiz model.pageData
-        , button [ onClick SendHttpRequest ]
-            [ text "Get Quiz!!" ]
+                viewQuiz model
         ]
     }
 
@@ -205,27 +241,48 @@ viewError errorMessage =
         ]
 
 
-viewQuiz : Maybe Quiz -> Html Msg
-viewQuiz data =
-    case data of
+viewQuiz : Model -> Html Msg
+viewQuiz model =
+    case model.pageData of
         Just quiz ->
             div []
                 [ div []
                     [ quiz.id |> String.fromInt >> text ]
                 , renderCells quiz.question
-                , renderCells quiz.answer
+                , quiz.answer
+                    |> List.take model.counter
+                    |> renderCells
+                , if model.counter == List.length quiz.answer then
+                    button [ onClick Decrement ] [ text "Back" ]
+
+                  else if model.counter == 0 then
+                    button [ onClick Increment ] [ text "Next" ]
+
+                  else
+                    div []
+                        [ button [ onClick Increment ] [ text "Next" ]
+                        , button [ onClick Decrement ] [ text "Back" ]
+                        ]
                 ]
 
         Nothing ->
-            div [] [ text "No Quiz" ]
+            div []
+                [ div [] [ text "No Quiz" ]
+                , button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ]
+                ]
 
 
 renderCells : List Cell -> Html msg
 renderCells cells =
-    ul []
-        (cells
-            |> List.map toLi
-        )
+    cells
+        |> viewListing
+        |> ul []
+
+
+viewListing : List Cell -> List (Html msg)
+viewListing cells =
+    cells
+        |> List.map toLi
 
 
 toLi : Cell -> Html msg
