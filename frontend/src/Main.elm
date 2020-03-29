@@ -247,7 +247,11 @@ viewQuiz model =
         Just quiz ->
             div []
                 [ div []
-                    [ quiz.id |> String.fromInt >> text ]
+                    [ quiz.id
+                        |> String.fromInt
+                        |> (++) "id: "
+                        |> text
+                    ]
                 , renderCells quiz.question
                 , quiz.answer
                     |> List.take model.counter
