@@ -214,7 +214,6 @@ viewQuiz data =
                     [ quiz.id |> String.fromInt >> text ]
                 , renderCells quiz.question
                 , renderCells quiz.answer
-                , viewSVG "http://127.0.0.1:3000/example/svg/test"
                 ]
 
         Nothing ->
@@ -231,7 +230,15 @@ renderCells cells =
 
 toLi : Cell -> Html msg
 toLi cell =
-    li [] [ text cell.content ]
+    case cell.kind of
+        "text" ->
+            li [] [ text cell.content ]
+
+        "svg" ->
+            viewSVG cell.content
+
+        _ ->
+            li [] [ text "Empty Cell" ]
 
 
 viewNotFound : Model -> Browser.Document Msg
