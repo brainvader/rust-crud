@@ -56,7 +56,7 @@ type alias Model =
     { key : Nav.Key
     , currentPage : Page
     , pageData : Maybe Quiz
-    , counter : Int
+    , counter : Counter
     , errorMessage : Maybe String
     }
 
