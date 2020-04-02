@@ -258,12 +258,12 @@ viewQuiz model =
                     ]
                 , renderCells quiz.question
                 , quiz.answer
-                    |> List.take model.counter
+                    |> List.take model.counter.count
                     |> renderCells
-                , if model.counter == List.length quiz.answer then
+                , if model.counter.count == model.counter.max then
                     button [ onClick Decrement ] [ text "Back" ]
 
-                  else if model.counter == 0 then
+                  else if model.counter.count == 0 then
                     button [ onClick Increment ] [ text "Next" ]
 
                   else
