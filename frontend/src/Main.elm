@@ -127,7 +127,15 @@ update msg preModel =
         DataReceived result ->
             case result of
                 Ok quiz ->
-                    ( { preModel | pageData = Just quiz }, Cmd.none )
+                    let
+                        max =
+                            quiz.answer
+                                |> List.length
+
+                        counter =
+                            Counter 0 0 max
+                    in
+                    ( { preModel | pageData = Just quiz, counter = counter }, Cmd.none )
 
                 Err httpError ->
                     ( { preModel | errorMessage = Just (buildErrorMessage httpError) }, Cmd.none )
@@ -138,7 +146,7 @@ update msg preModel =
                     preModel.pageData
                         |> countCell
             in
-            ( { preModel | counter = preModel.counter |> countUp |> untilMax cellSize }, Cmd.none )
+            ( { preModel | counter = preModel.counter |> countUp }, Cmd.none )
 
         Decrement ->
             ( { preModel | counter = preModel.counter |> countDown |> untilMin 0 }, Cmd.none )
@@ -155,9 +163,13 @@ countCell data =
             0
 
 
-countUp : Int -> Int
-countUp count =
-    count + 1
+countUp : Counter -> Counter
+countUp counter =
+    if counter.max < counter.count then
+        { counter | count = counter.max }
+
+    else
+        { counter | count = counter.count + 1 }
 
 
 untilMax : Int -> Int -> Int
