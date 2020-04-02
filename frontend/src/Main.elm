@@ -24,6 +24,13 @@ main =
         }
 
 
+type alias Counter =
+    { count : Int
+    , min : Int
+    , max : Int
+    }
+
+
 type alias Cell =
     { kind : String
     , content : String
