@@ -127,11 +127,11 @@ update msg preModel =
 
         Increment ->
             let
-                max =
+                cellSize =
                     preModel.pageData
                         |> countCell
             in
-            ( { preModel | counter = preModel.counter |> countUp |> untilMax max }, Cmd.none )
+            ( { preModel | counter = preModel.counter |> countUp |> untilMax cellSize }, Cmd.none )
 
         Decrement ->
             ( { preModel | counter = preModel.counter |> countDown |> untilMin 0 }, Cmd.none )
