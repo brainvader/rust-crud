@@ -141,26 +141,10 @@ update msg preModel =
                     ( { preModel | errorMessage = Just (buildErrorMessage httpError) }, Cmd.none )
 
         Increment ->
-            let
-                cellSize =
-                    preModel.pageData
-                        |> countCell
-            in
             ( { preModel | counter = preModel.counter |> countUp }, Cmd.none )
 
         Decrement ->
             ( { preModel | counter = preModel.counter |> countDown }, Cmd.none )
-
-
-countCell : Maybe Quiz -> Int
-countCell data =
-    case data of
-        Just quiz ->
-            quiz.answer
-                |> List.length
-
-        Nothing ->
-            0
 
 
 countUp : Counter -> Counter
@@ -170,24 +154,6 @@ countUp counter =
 
     else
         { counter | count = counter.count + 1 }
-
-
-untilMax : Int -> Int -> Int
-untilMax max count =
-    if max < count then
-        max
-
-    else
-        count
-
-
-untilMin : Int -> Int -> Int
-untilMin min count =
-    if count < min then
-        min
-
-    else
-        count
 
 
 countDown : Counter -> Counter
