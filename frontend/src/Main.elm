@@ -264,7 +264,7 @@ viewQuiz model =
                 [ div []
                     [ quiz.id
                         |> String.fromInt
-                        |> (++) "id: "
+                        |> String.append "id: "
                         |> text
                     ]
                 , renderCells quiz.question
