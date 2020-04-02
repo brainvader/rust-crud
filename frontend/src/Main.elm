@@ -260,10 +260,10 @@ viewQuiz model =
                         |> String.append "id: "
                         |> text
                     ]
-                , renderCells quiz.question
+                , viewCells quiz.question
                 , quiz.answer
                     |> List.take model.counter.count
-                    |> renderCells
+                    |> viewCells
                 , if model.counter.count == model.counter.max then
                     button [ onClick Decrement ] [ text "Back" ]
 
@@ -284,8 +284,8 @@ viewQuiz model =
                 ]
 
 
-renderCells : List Cell -> Html msg
-renderCells cells =
+viewCells : List Cell -> Html msg
+viewCells cells =
     cells
         |> viewListing
         |> ul []
