@@ -134,7 +134,7 @@ update msg preModel =
             ( { preModel | counter = preModel.counter |> countUp |> until max }, Cmd.none )
 
         Decrement ->
-            ( { preModel | counter = preModel.counter |> countDown }, Cmd.none )
+            ( { preModel | counter = preModel.counter |> countDown |> untilMin 0 }, Cmd.none )
 
 
 countCell : Maybe Quiz -> Int
@@ -157,6 +157,15 @@ until : Int -> Int -> Int
 until max count =
     if max < count then
         max
+
+    else
+        count
+
+
+untilMin : Int -> Int -> Int
+untilMin min count =
+    if count < min then
+        min
 
     else
         count
