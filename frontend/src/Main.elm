@@ -164,12 +164,7 @@ until max count =
 
 countDown : Int -> Int
 countDown count =
-    case count of
-        0 ->
-            0
-
-        _ ->
-            count - 1
+    count - 1
 
 
 buildErrorMessage : Http.Error -> String
