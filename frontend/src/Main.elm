@@ -2,8 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, a, button, div, h1, h3, img, li, text, ul)
-import Html.Attributes exposing (height, href, src, width)
+import Html exposing (Html, a, button, div, embed, h1, h3, img, li, object, text, ul)
+import Html.Attributes exposing (height, href, src, type_, width)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder, int, list, string)
@@ -311,8 +311,9 @@ viewNotFound model =
 
 viewSVG : String -> Html msg
 viewSVG url =
-    img
-        [ src url
+    embed
+        [ type_ "image/svg+xml"
+        , src url
         , width 500
         , height 500
         ]
