@@ -131,7 +131,7 @@ update msg preModel =
                     preModel.pageData
                         |> countCell
             in
-            ( { preModel | counter = preModel.counter |> countUp |> until max }, Cmd.none )
+            ( { preModel | counter = preModel.counter |> countUp |> untilMax max }, Cmd.none )
 
         Decrement ->
             ( { preModel | counter = preModel.counter |> countDown |> untilMin 0 }, Cmd.none )
@@ -153,8 +153,8 @@ countUp count =
     count + 1
 
 
-until : Int -> Int -> Int
-until max count =
+untilMax : Int -> Int -> Int
+untilMax max count =
     if max < count then
         max
 
