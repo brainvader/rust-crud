@@ -136,19 +136,24 @@ update msg preModel =
                         Nothing ->
                             0
             in
-            ( { preModel | counter = preModel.counter |> countUp max }, Cmd.none )
+            ( { preModel | counter = preModel.counter |> countUp |> until max }, Cmd.none )
 
         Decrement ->
             ( { preModel | counter = preModel.counter |> countDown }, Cmd.none )
 
 
-countUp : Int -> Int -> Int
-countUp max count =
-    if count == max then
-        count
+countUp : Int -> Int
+countUp count =
+    count + 1
+
+
+until : Int -> Int -> Int
+until max count =
+    if max < count then
+        max
 
     else
-        count + 1
+        count
 
 
 countDown : Int -> Int
