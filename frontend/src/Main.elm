@@ -149,7 +149,7 @@ update msg preModel =
             ( { preModel | counter = preModel.counter |> countUp }, Cmd.none )
 
         Decrement ->
-            ( { preModel | counter = preModel.counter |> countDown |> untilMin 0 }, Cmd.none )
+            ( { preModel | counter = preModel.counter |> countDown }, Cmd.none )
 
 
 countCell : Maybe Quiz -> Int
@@ -190,9 +190,13 @@ untilMin min count =
         count
 
 
-countDown : Int -> Int
-countDown count =
-    count - 1
+countDown : Counter -> Counter
+countDown counter =
+    if counter.count < counter.min then
+        { counter | count = counter.min }
+
+    else
+        { counter | count = counter.count - 1 }
 
 
 buildErrorMessage : Http.Error -> String
