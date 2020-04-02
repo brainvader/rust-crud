@@ -70,8 +70,12 @@ type Page
 
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
+    let
+        counter =
+            Counter 0 0 0
+    in
     url
-        |> stepUrl (Model key Top Nothing 0 Nothing)
+        |> stepUrl (Model key Top Nothing counter Nothing)
 
 
 type Msg
