@@ -128,18 +128,24 @@ update msg preModel =
         Increment ->
             let
                 max =
-                    case preModel.pageData of
-                        Just quiz ->
-                            quiz.answer
-                                |> List.length
-
-                        Nothing ->
-                            0
+                    preModel.pageData
+                        |> countCell
             in
             ( { preModel | counter = preModel.counter |> countUp |> until max }, Cmd.none )
 
         Decrement ->
             ( { preModel | counter = preModel.counter |> countDown }, Cmd.none )
+
+
+countCell : Maybe Quiz -> Int
+countCell data =
+    case data of
+        Just quiz ->
+            quiz.answer
+                |> List.length
+
+        Nothing ->
+            0
 
 
 countUp : Int -> Int
