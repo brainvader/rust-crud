@@ -1,5 +1,5 @@
 /target
 /frontend/elm-stuff
 /frontend/dist
-/frontend/public/*.js
+/frontend/public/main.js
 .DS_Store
