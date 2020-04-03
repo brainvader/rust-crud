@@ -43,7 +43,7 @@ If You would like to know waht is each part of the command, please consult follo
 To build the elm application, using [elm-live](https://www.elm-live.com/).
 
 ```bash
-elm-live src/Main.elm --open --pushstate --port=5050 --host=localhost --dir=./dist -- --output=./dist/index.html
+elm-live src/Main.elm --open --pushstate --port=5050 --host=localhost --dir=./public  --start-page=index.html  -- --output=./public/main.js 
 ```
 
 ### Run bayard on Docker
