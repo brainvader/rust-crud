@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
@@ -8,8 +8,12 @@ import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder, int, list, string)
 import Json.Decode.Pipeline exposing (required)
+import Json.Encode as Encode
 import Url exposing (Url)
 import Url.Parser as Router exposing (Parser, s, top)
+
+
+port log : Encode.Value -> Cmd msg
 
 
 main : Program () Model Msg
@@ -139,16 +143,20 @@ update msg preModel =
                         counter =
                             Counter 0 0 max
                     in
-                    ( { preModel | pageData = Just quiz, counter = counter }, Cmd.none )
+                    ( { preModel | pageData = Just quiz, counter = counter }, Encode.string "DataReceived" |> log )
 
                 Err httpError ->
                     ( { preModel | errorMessage = Just (buildErrorMessage httpError) }, Cmd.none )
 
         Increment ->
-            ( { preModel | counter = preModel.counter |> countUp }, Cmd.none )
+            ( { preModel | counter = preModel.counter |> countUp }
+            , Encode.string "Increment" |> log
+            )
 
         Decrement ->
-            ( { preModel | counter = preModel.counter |> countDown }, Cmd.none )
+            ( { preModel | counter = preModel.counter |> countDown }
+            , Encode.string "Decrement" |> log
+            )
 
 
 countUp : Counter -> Counter
