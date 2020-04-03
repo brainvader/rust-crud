@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const app = Elm.Main.init({
-        node: document.getElementById('elm'),
-        flags: Date.now()
+        node: document.getElementById('elm')
     });
 
 })
