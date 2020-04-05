@@ -3,7 +3,7 @@ port module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Flip exposing (flip)
-import Html exposing (Html, a, button, div, embed, h1, h3, li, text, ul)
+import Html exposing (Html, a, button, div, embed, h1, h2, h3, li, text, ul)
 import Html.Attributes exposing (class, height, href, id, src, type_, width)
 import Html.Events exposing (onClick)
 import Http
@@ -275,6 +275,7 @@ viewQuiz model =
                     |> toTitle
                     |> viewTitle
                 , viewCells quiz.question
+                , h2 [] [ text "答え" ]
                 , quiz.answer
                     |> List.indexedMap Tuple.pair
                     |> List.map
@@ -301,7 +302,7 @@ viewBackAndForthButton : Counter -> Html Msg
 viewBackAndForthButton counter =
     div []
         (if counter.count == 0 then
-            [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
+            [ button [ id "forth-btn", onClick Increment ] [ text "Show Answer" ]
             , button [ id "back-btn", class "hidden", onClick Decrement ] [ text "Back" ]
             ]
 
