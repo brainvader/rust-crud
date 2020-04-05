@@ -4,6 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     app.ports.log.subscribe((message) => {
-        console.log(`${message} from Elm`);
+        console.log(`${message}  in JS`);
+    });
+
+    app.ports.ref.subscribe((selector) => {
+        window.requestAnimationFrame(() => {
+            const element = document.querySelector(selector);
+            console.log(`${selector} is referenced`);
+            element.addEventListener('click', () => {
+                console.log(`${selector}`);
+            });
+        });
     });
 })
