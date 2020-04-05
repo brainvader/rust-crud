@@ -286,23 +286,8 @@ viewQuiz model =
                                 li [] [ viewCell cell ]
                         )
                     |> ul [ class "list-answer", class "no-bullet" ]
-                , if model.counter.count == 0 then
-                    div []
-                        [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
-                        , button [ id "back-btn", class "hidden", onClick Decrement ] [ text "Back" ]
-                        ]
-
-                  else if model.counter.count == model.counter.max then
-                    div []
-                        [ button [ id "forth-btn", class "hidden", onClick Increment ] [ text "Next" ]
-                        , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
-                        ]
-
-                  else
-                    div []
-                        [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
-                        , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
-                        ]
+                , model.counter
+                    |> viewBackAndForthButton
                 ]
 
         Nothing ->
@@ -310,6 +295,26 @@ viewQuiz model =
                 [ div [] [ text "No Quiz" ]
                 , button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ]
                 ]
+
+
+viewBackAndForthButton : Counter -> Html Msg
+viewBackAndForthButton counter =
+    div []
+        (if counter.count == 0 then
+            [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
+            , button [ id "back-btn", class "hidden", onClick Decrement ] [ text "Back" ]
+            ]
+
+         else if counter.count == counter.max then
+            [ button [ id "forth-btn", class "hidden", onClick Increment ] [ text "Next" ]
+            , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
+            ]
+
+         else
+            [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
+            , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
+            ]
+        )
 
 
 toTitle : Int -> String
