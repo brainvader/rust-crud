@@ -3,7 +3,7 @@ port module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (Html, a, button, div, embed, h1, h3, img, li, object, text, ul)
-import Html.Attributes exposing (height, href, src, type_, width)
+import Html.Attributes exposing (class, height, href, id, src, type_, width)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder, int, list, string)
@@ -14,6 +14,9 @@ import Url.Parser as Router exposing (Parser, s, top)
 
 
 port log : Encode.Value -> Cmd msg
+
+
+port ref : Encode.Value -> Cmd msg
 
 
 main : Program () Model Msg
@@ -143,7 +146,12 @@ update msg preModel =
                         counter =
                             Counter 0 0 max
                     in
-                    ( { preModel | pageData = Just quiz, counter = counter }, Encode.string "DataReceived" |> log )
+                    ( { preModel | pageData = Just quiz, counter = counter }
+                    , Cmd.batch
+                        [ Encode.string "#forth-btn" |> ref
+                        , Encode.string "#back-btn" |> ref
+                        ]
+                    )
 
                 Err httpError ->
                     ( { preModel | errorMessage = Just (buildErrorMessage httpError) }, Cmd.none )
@@ -270,18 +278,32 @@ viewQuiz model =
                     ]
                 , viewCells quiz.question
                 , quiz.answer
-                    |> List.take model.counter.count
-                    |> viewCells
-                , if model.counter.count == model.counter.max then
-                    button [ onClick Decrement ] [ text "Back" ]
+                    |> List.indexedMap Tuple.pair
+                    |> List.map
+                        (\( i, cell ) ->
+                            if model.counter.count < i + 1 then
+                                li [ class "hidden" ] [ viewCell cell ]
 
-                  else if model.counter.count == 0 then
-                    button [ onClick Increment ] [ text "Next" ]
+                            else
+                                li [] [ viewCell cell ]
+                        )
+                    |> ul [ class "list-answer", class "no-bullet" ]
+                , if model.counter.count == 0 then
+                    div []
+                        [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
+                        , button [ id "back-btn", class "hidden", onClick Decrement ] [ text "Back" ]
+                        ]
+
+                  else if model.counter.count == model.counter.max then
+                    div []
+                        [ button [ id "forth-btn", class "hidden", onClick Increment ] [ text "Next" ]
+                        , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
+                        ]
 
                   else
                     div []
-                        [ button [ onClick Increment ] [ text "Next" ]
-                        , button [ onClick Decrement ] [ text "Back" ]
+                        [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
+                        , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
                         ]
                 ]
 
@@ -292,17 +314,24 @@ viewQuiz model =
                 ]
 
 
+viewCell : Cell -> Html msg
+viewCell cell =
+    case cell.kind of
+        "text" ->
+            text cell.content
+
+        "svg" ->
+            viewSVG cell.content
+
+        _ ->
+            text "Empty Cell"
+
+
 viewCells : List Cell -> Html msg
 viewCells cells =
     cells
-        |> viewListing
-        |> ul []
-
-
-viewListing : List Cell -> List (Html msg)
-viewListing cells =
-    cells
         |> List.map toLi
+        |> ul [ class "no-bullet" ]
 
 
 toLi : Cell -> Html msg
@@ -312,7 +341,7 @@ toLi cell =
             li [] [ text cell.content ]
 
         "svg" ->
-            viewSVG cell.content
+            li [] [ viewSVG cell.content ]
 
         _ ->
             li [] [ text "Empty Cell" ]
