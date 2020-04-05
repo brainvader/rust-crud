@@ -1,0 +1,9 @@
+/* Code from https://developer.mozilla.org/en-US/docs/Web/CSS/visibility#Examples  */
+
+.hidden {
+  display: none;
+}
+
+ul.no-bullet {
+  list-style-type: none;
+}
