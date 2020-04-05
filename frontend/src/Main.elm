@@ -2,7 +2,7 @@ port module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, a, button, div, embed, h1, h3, img, li, object, text, ul)
+import Html exposing (Html, a, button, div, embed, h1, h3, li, text, ul)
 import Html.Attributes exposing (class, height, href, id, src, type_, width)
 import Html.Events exposing (onClick)
 import Http
