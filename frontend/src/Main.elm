@@ -2,6 +2,7 @@ port module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
+import Flip exposing (flip)
 import Html exposing (Html, a, button, div, embed, h1, h3, li, text, ul)
 import Html.Attributes exposing (class, height, href, id, src, type_, width)
 import Html.Events exposing (onClick)
@@ -270,12 +271,9 @@ viewQuiz model =
     case model.pageData of
         Just quiz ->
             div []
-                [ div []
-                    [ quiz.id
-                        |> String.fromInt
-                        |> String.append "id: "
-                        |> text
-                    ]
+                [ quiz.id
+                    |> toTitle
+                    |> viewTitle
                 , viewCells quiz.question
                 , quiz.answer
                     |> List.indexedMap Tuple.pair
@@ -312,6 +310,20 @@ viewQuiz model =
                 [ div [] [ text "No Quiz" ]
                 , button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ]
                 ]
+
+
+toTitle : Int -> String
+toTitle id =
+    id
+        |> String.fromInt
+        |> String.append "Q"
+        |> flip String.append ". "
+        |> flip String.append "ここはタイトルです"
+
+
+viewTitle : String -> Html msg
+viewTitle title =
+    h1 [] [ text title ]
 
 
 viewCell : Cell -> Html msg
