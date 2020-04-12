@@ -271,7 +271,9 @@ viewQuiz model =
     case model.pageData of
         Just quiz ->
             div []
-                [ quiz.id
+                [ model.counter
+                    |> viewCounter
+                , quiz.id
                     |> toTitle
                     |> viewTitle
                 , viewCells quiz.question
@@ -294,6 +296,16 @@ viewQuiz model =
                 [ div [] [ text "No Quiz" ]
                 , button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ]
                 ]
+
+
+viewCounter : Counter -> Html Msg
+viewCounter counter =
+    div []
+        [ counter.count
+            |> String.fromInt
+            |> String.append "Counter: "
+            |> text
+        ]
 
 
 viewShowAnswer : Model -> Html Msg
