@@ -4,7 +4,7 @@ import Browser
 import Browser.Navigation as Nav
 import Flip exposing (flip)
 import Html exposing (Html, a, button, div, embed, h1, h2, h3, li, text, ul)
-import Html.Attributes exposing (class, height, href, id, src, type_, width)
+import Html.Attributes exposing (class, classList, height, href, id, src, type_, width)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode as Decode exposing (Decoder, int, list, string)
@@ -280,15 +280,13 @@ viewQuiz model =
                     |> List.indexedMap Tuple.pair
                     |> List.map
                         (\( i, cell ) ->
-                            if model.counter.count < i + 1 then
-                                li [ class "hidden" ] [ viewCell cell ]
-
-                            else
-                                li [] [ viewCell cell ]
+                            li
+                                [ classList [ ( "hidden", model.counter.count < i + 1 ) ] ]
+                                [ viewCell cell ]
                         )
                     |> ul [ class "list-answer", class "no-bullet" ]
-                , model.counter
-                    |> viewBackAndForthButton
+                , model
+                    |> viewShowAnswer
                 ]
 
         Nothing ->
@@ -298,24 +296,29 @@ viewQuiz model =
                 ]
 
 
-viewBackAndForthButton : Counter -> Html Msg
-viewBackAndForthButton counter =
-    div []
-        (if counter.count == 0 then
-            [ button [ id "forth-btn", onClick Increment ] [ text "Show Answer" ]
-            , button [ id "back-btn", class "hidden", onClick Decrement ] [ text "Back" ]
-            ]
+viewShowAnswer : Model -> Html Msg
+viewShowAnswer model =
+    model
+        |> viewBackAndForthButton
+        |> div []
 
-         else if counter.count == counter.max then
-            [ button [ id "forth-btn", class "hidden", onClick Increment ] [ text "Next" ]
-            , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
-            ]
 
-         else
-            [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
-            , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
-            ]
-        )
+viewBackAndForthButton : Model -> List (Html Msg)
+viewBackAndForthButton model =
+    if model.counter.count == 0 then
+        [ button [ id "forth-btn", onClick Increment ] [ text "Show Answer" ]
+        , button [ id "back-btn", class "hidden", onClick Decrement ] [ text "Back" ]
+        ]
+
+    else if model.counter.count == model.counter.max then
+        [ button [ id "forth-btn", class "hidden", onClick Increment ] [ text "Next" ]
+        , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
+        ]
+
+    else
+        [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
+        , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
+        ]
 
 
 toTitle : Int -> String
