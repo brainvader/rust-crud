@@ -333,7 +333,11 @@ viewQuiz model =
                     |> toTitle
                     |> viewTitle
                 , model.quiz.question
-                    |> viewCells
+                    |> List.map
+                        (\cell ->
+                            li [] [ viewCell cell ]
+                        )
+                    |> ul [ class "list-question", class "no-bullet" ]
                 , h2 [] [ text "答え" ]
                 , model.quiz.answer
                     |> List.map
@@ -417,26 +421,6 @@ viewCell cell =
 
         _ ->
             text "Empty Cell"
-
-
-viewCells : List Cell -> Html msg
-viewCells cells =
-    cells
-        |> List.map toLi
-        |> ul [ class "no-bullet" ]
-
-
-toLi : Cell -> Html msg
-toLi cell =
-    case cell.kind of
-        "text" ->
-            li [] [ text cell.content ]
-
-        "svg" ->
-            li [] [ viewSVG cell.content ]
-
-        _ ->
-            li [] [ text "Empty Cell" ]
 
 
 viewNotFound : Model -> Browser.Document Msg
