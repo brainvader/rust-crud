@@ -348,7 +348,7 @@ viewQuiz model =
                         )
                     |> ul [ class "list-answer", class "no-bullet" ]
                 , model
-                    |> viewShowAnswer
+                    |> viewAnswerButton
                 ]
 
         Yet ->
@@ -368,8 +368,8 @@ viewCounter counter =
         ]
 
 
-viewShowAnswer : Model -> Html Msg
-viewShowAnswer model =
+viewAnswerButton : Model -> Html Msg
+viewAnswerButton model =
     model
         |> viewBackAndForthButton
         |> div []
@@ -378,7 +378,7 @@ viewShowAnswer model =
 viewBackAndForthButton : Model -> List (Html Msg)
 viewBackAndForthButton model =
     if model.counter.count == 0 then
-        [ button [ id "forth-btn", onClick <| AnswerShowd Forward ] [ text "Show Answer" ]
+        [ button [ id "forth-btn", onClick <| AnswerShowd Forward ] [ text "Answer" ]
         , button [ id "back-btn", class "hidden", onClick <| AnswerShowd Backward ] [ text "Back" ]
         ]
 
