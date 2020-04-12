@@ -7,8 +7,8 @@ import Html exposing (Html, a, button, div, embed, h1, h2, h3, li, text, ul)
 import Html.Attributes exposing (class, classList, height, href, id, src, type_, width)
 import Html.Events exposing (onClick)
 import Http
-import Json.Decode as Decode exposing (Decoder, int, list, string)
-import Json.Decode.Pipeline exposing (required)
+import Json.Decode as Decode exposing (Decoder, bool, int, list, string)
+import Json.Decode.Pipeline exposing (optional, required)
 import Json.Encode as Encode
 import Url exposing (Url)
 import Url.Parser as Router exposing (Parser, s, top)
@@ -41,6 +41,7 @@ type alias Counter =
 
 type alias Cell =
     { kind : String
+    , hidden : Bool
     , content : String
     }
 
@@ -60,11 +61,17 @@ type alias Quiz =
     }
 
 
+type QuizReady
+    = Ready
+    | Yet
+
+
 type alias Model =
     { key : Nav.Key
     , currentPage : Page
-    , pageData : Maybe Quiz
+    , quizReady : QuizReady
     , counter : Counter
+    , quiz : Quiz
     , errorMessage : Maybe String
     }
 
@@ -80,10 +87,33 @@ init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     let
         counter =
-            Counter 0 0 0
+            { count = 0
+            , min = 0
+            , max = 0
+            }
+
+        quiz =
+            { id = 0
+            , question = []
+            , answer = []
+            }
+
+        initialModel =
+            { key = key
+            , currentPage = Top
+            , quizReady = Yet
+            , counter = counter
+            , quiz = quiz
+            , errorMessage = Nothing
+            }
     in
     url
-        |> stepUrl (Model key Top Nothing counter Nothing)
+        |> stepUrl initialModel
+
+
+type Order
+    = Forward
+    | Backward
 
 
 type Msg
@@ -91,8 +121,7 @@ type Msg
     | UrlChanged Url.Url
     | SendHttpRequest
     | DataReceived (Result Http.Error Quiz)
-    | Increment
-    | Decrement
+    | AnswerShowd Order
 
 
 getQuiz : Cmd Msg
@@ -107,6 +136,7 @@ cellDecoder : Decoder Cell
 cellDecoder =
     Decode.succeed Cell
         |> required "kind" string
+        |> optional "hidden" bool True
         |> required "content" string
 
 
@@ -145,9 +175,12 @@ update msg preModel =
                                 |> List.length
 
                         counter =
-                            Counter 0 0 max
+                            { count = 0
+                            , min = 0
+                            , max = max
+                            }
                     in
-                    ( { preModel | pageData = Just quiz, counter = counter }
+                    ( { preModel | quizReady = Ready, quiz = quiz, counter = counter }
                     , Cmd.batch
                         [ Encode.string "#forth-btn" |> ref
                         , Encode.string "#back-btn" |> ref
@@ -157,14 +190,37 @@ update msg preModel =
                 Err httpError ->
                     ( { preModel | errorMessage = Just (buildErrorMessage httpError) }, Cmd.none )
 
-        Increment ->
-            ( { preModel | counter = preModel.counter |> countUp }
-            , Encode.string "Increment" |> log
-            )
+        AnswerShowd order ->
+            let
+                counter =
+                    case order of
+                        Forward ->
+                            preModel.counter |> countUp
 
-        Decrement ->
-            ( { preModel | counter = preModel.counter |> countDown }
-            , Encode.string "Decrement" |> log
+                        Backward ->
+                            preModel.counter |> countDown
+
+                answer =
+                    preModel.quiz.answer
+                        |> List.indexedMap Tuple.pair
+                        |> List.map
+                            (\( i, cell ) ->
+                                if i < counter.count then
+                                    { cell | hidden = False }
+
+                                else
+                                    { cell | hidden = True }
+                            )
+
+                newQuiz =
+                    { id = preModel.quiz.id
+                    , question = preModel.quiz.question
+                    , answer = answer
+                    }
+            in
+            ( { preModel | counter = counter, quiz = newQuiz }
+            , Encode.string "AnswerShowed"
+                |> log
             )
 
 
@@ -268,23 +324,22 @@ viewError errorMessage =
 
 viewQuiz : Model -> Html Msg
 viewQuiz model =
-    case model.pageData of
-        Just quiz ->
+    case model.quizReady of
+        Ready ->
             div []
                 [ model.counter
                     |> viewCounter
-                , quiz.id
+                , model.quiz.id
                     |> toTitle
                     |> viewTitle
-                , quiz.question
+                , model.quiz.question
                     |> viewCells
                 , h2 [] [ text "答え" ]
-                , quiz.answer
-                    |> List.indexedMap Tuple.pair
+                , model.quiz.answer
                     |> List.map
-                        (\( i, cell ) ->
+                        (\cell ->
                             li
-                                [ classList [ ( "hidden", model.counter.count < i + 1 ) ] ]
+                                [ classList [ ( "hidden", cell.hidden ) ] ]
                                 [ viewCell cell ]
                         )
                     |> ul [ class "list-answer", class "no-bullet" ]
@@ -292,7 +347,7 @@ viewQuiz model =
                     |> viewShowAnswer
                 ]
 
-        Nothing ->
+        Yet ->
             div []
                 [ div [] [ text "No Quiz" ]
                 , button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ]
@@ -319,18 +374,18 @@ viewShowAnswer model =
 viewBackAndForthButton : Model -> List (Html Msg)
 viewBackAndForthButton model =
     if model.counter.count == 0 then
-        [ button [ id "forth-btn", onClick Increment ] [ text "Show Answer" ]
-        , button [ id "back-btn", class "hidden", onClick Decrement ] [ text "Back" ]
+        [ button [ id "forth-btn", onClick <| AnswerShowd Forward ] [ text "Show Answer" ]
+        , button [ id "back-btn", class "hidden", onClick <| AnswerShowd Backward ] [ text "Back" ]
         ]
 
     else if model.counter.count == model.counter.max then
-        [ button [ id "forth-btn", class "hidden", onClick Increment ] [ text "Next" ]
-        , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
+        [ button [ id "forth-btn", class "hidden", onClick <| AnswerShowd Forward ] [ text "Next" ]
+        , button [ id "back-btn", onClick <| AnswerShowd Backward ] [ text "Back" ]
         ]
 
     else
-        [ button [ id "forth-btn", onClick Increment ] [ text "Next" ]
-        , button [ id "back-btn", onClick Decrement ] [ text "Back" ]
+        [ button [ id "forth-btn", onClick <| AnswerShowd Forward ] [ text "Next" ]
+        , button [ id "back-btn", onClick <| AnswerShowd Backward ] [ text "Back" ]
         ]
 
 
@@ -356,6 +411,9 @@ viewCell cell =
 
         "svg" ->
             viewSVG cell.content
+
+        "animation" ->
+            text "Play Animation"
 
         _ ->
             text "Empty Cell"
