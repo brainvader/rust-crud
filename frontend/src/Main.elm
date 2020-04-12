@@ -325,6 +325,12 @@ viewError errorMessage =
 viewQuiz : Model -> Html Msg
 viewQuiz model =
     case model.quizReady of
+        Yet ->
+            div []
+                [ div [] [ text "No Quiz" ]
+                , button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ]
+                ]
+
         Ready ->
             div []
                 [ model.counter
@@ -349,12 +355,6 @@ viewQuiz model =
                     |> ul [ class "list-answer", class "no-bullet" ]
                 , model
                     |> viewAnswerButton
-                ]
-
-        Yet ->
-            div []
-                [ div [] [ text "No Quiz" ]
-                , button [ onClick SendHttpRequest ] [ text "Get Quiz!!" ]
                 ]
 
 
