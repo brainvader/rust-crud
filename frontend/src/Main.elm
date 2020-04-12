@@ -276,7 +276,8 @@ viewQuiz model =
                 , quiz.id
                     |> toTitle
                     |> viewTitle
-                , viewCells quiz.question
+                , quiz.question
+                    |> viewCells
                 , h2 [] [ text "答え" ]
                 , quiz.answer
                     |> List.indexedMap Tuple.pair
