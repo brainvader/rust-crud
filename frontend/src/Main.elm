@@ -412,6 +412,29 @@ viewCounter counter =
         ]
 
 
+toLabel : Order -> Command -> String
+toLabel order command =
+    case command of
+        Show ->
+            case order of
+                Forward ->
+                    "Show"
+
+                Backward ->
+                    "Back"
+
+        Animation ->
+            case order of
+                Forward ->
+                    "Play"
+
+                Backward ->
+                    "Reverse"
+
+        NoOps ->
+            "Oops!"
+
+
 viewAnswerButton : Model -> Html Msg
 viewAnswerButton model =
     model
@@ -445,7 +468,7 @@ viewBackAndForthButton model =
         , onClick <|
             Execute Forward nextCommand
         ]
-        [ text "Show" ]
+        [ nextCommand |> toLabel Forward |> text ]
     , button
         [ id "back-btn"
         , classList
@@ -453,7 +476,7 @@ viewBackAndForthButton model =
         , onClick <|
             Execute Backward prevCommand
         ]
-        [ text "Back" ]
+        [ prevCommand |> toLabel Backward |> text ]
     ]
 
 
