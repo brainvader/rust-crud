@@ -18,6 +18,10 @@
         {
             "kind": "animation",
             "content": "{ targets: '.hoge', duration: 1000, web: {opacity : [0, 1]} }"
+        },
+        {
+            "kind": "text",
+            "content": "このようにSVGを変化させられます"
         }
     ]
 }
