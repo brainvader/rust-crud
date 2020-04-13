@@ -66,12 +66,20 @@ type QuizReady
     | Yet
 
 
+type Command
+    = Show
+    | Animation
+    | NoOps
+
+
 type alias Model =
     { key : Nav.Key
     , currentPage : Page
     , quizReady : QuizReady
     , counter : Counter
     , quiz : Quiz
+    , redo : List Command
+    , undo : List Command
     , errorMessage : Maybe String
     }
 
@@ -104,6 +112,8 @@ init _ url key =
             , quizReady = Yet
             , counter = counter
             , quiz = quiz
+            , redo = []
+            , undo = []
             , errorMessage = Nothing
             }
     in
@@ -121,7 +131,7 @@ type Msg
     | UrlChanged Url.Url
     | SendHttpRequest
     | DataReceived (Result Http.Error Quiz)
-    | AnswerShowd Order
+    | Execute Order Command
 
 
 getQuiz : Cmd Msg
@@ -179,8 +189,26 @@ update msg preModel =
                             , min = 0
                             , max = max
                             }
+
+                        redo =
+                            quiz.answer
+                                |> List.map
+                                    (\cell ->
+                                        case cell.kind of
+                                            "text" ->
+                                                Show
+
+                                            "svg" ->
+                                                Show
+
+                                            "animation" ->
+                                                Animation
+
+                                            _ ->
+                                                Show
+                                    )
                     in
-                    ( { preModel | quizReady = Ready, quiz = quiz, counter = counter }
+                    ( { preModel | quizReady = Ready, quiz = quiz, redo = redo, counter = counter }
                     , Cmd.batch
                         [ Encode.string "#forth-btn" |> ref
                         , Encode.string "#back-btn" |> ref
@@ -190,15 +218,31 @@ update msg preModel =
                 Err httpError ->
                     ( { preModel | errorMessage = Just (buildErrorMessage httpError) }, Cmd.none )
 
-        AnswerShowd order ->
+        Execute order command ->
             let
-                counter =
+                ( counter, redo, undo ) =
                     case order of
                         Forward ->
-                            preModel.counter |> countUp
+                            ( preModel.counter
+                                |> countUp
+                            , preModel.redo
+                                |> List.drop 1
+                                |> Debug.log "redo"
+                            , preModel.undo
+                                |> List.append [ command ]
+                                |> Debug.log "undo"
+                            )
 
                         Backward ->
-                            preModel.counter |> countDown
+                            ( preModel.counter
+                                |> countDown
+                            , preModel.redo
+                                |> List.append [ command ]
+                                |> Debug.log "redo"
+                            , preModel.undo
+                                |> List.drop 1
+                                |> Debug.log "undo"
+                            )
 
                 answer =
                     preModel.quiz.answer
@@ -218,7 +262,7 @@ update msg preModel =
                     , answer = answer
                     }
             in
-            ( { preModel | counter = counter, quiz = newQuiz }
+            ( { preModel | counter = counter, redo = redo, undo = undo, quiz = newQuiz }
             , Encode.string "AnswerShowed"
                 |> log
             )
@@ -377,20 +421,40 @@ viewAnswerButton model =
 
 viewBackAndForthButton : Model -> List (Html Msg)
 viewBackAndForthButton model =
-    if model.counter.count == 0 then
-        [ button [ id "forth-btn", onClick <| AnswerShowd Forward ] [ text "Answer" ]
-        , button [ id "back-btn", class "hidden", onClick <| AnswerShowd Backward ] [ text "Back" ]
-        ]
+    let
+        nextCommand =
+            case model.redo of
+                x :: _ ->
+                    x
 
-    else if model.counter.count == model.counter.max then
-        [ button [ id "forth-btn", class "hidden", onClick <| AnswerShowd Forward ] [ text "Next" ]
-        , button [ id "back-btn", onClick <| AnswerShowd Backward ] [ text "Back" ]
-        ]
+                _ ->
+                    NoOps
 
-    else
-        [ button [ id "forth-btn", onClick <| AnswerShowd Forward ] [ text "Next" ]
-        , button [ id "back-btn", onClick <| AnswerShowd Backward ] [ text "Back" ]
+        prevCommand =
+            case model.undo of
+                x :: _ ->
+                    x
+
+                _ ->
+                    NoOps
+    in
+    [ button
+        [ id "forth-btn"
+        , classList
+            [ ( "hidden", model.counter.count == model.counter.max ) ]
+        , onClick <|
+            Execute Forward nextCommand
         ]
+        [ text "Show" ]
+    , button
+        [ id "back-btn"
+        , classList
+            [ ( "hidden", model.counter.count == 0 ) ]
+        , onClick <|
+            Execute Backward prevCommand
+        ]
+        [ text "Back" ]
+    ]
 
 
 toTitle : Int -> String
@@ -417,7 +481,7 @@ viewCell cell =
             viewSVG cell.content
 
         "animation" ->
-            text "Play Animation"
+            text ""
 
         _ ->
             text "Empty Cell"
